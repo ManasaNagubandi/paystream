@@ -4,6 +4,7 @@ import com.paystream.payment_service.dto.PaymentRequest;
 import com.paystream.payment_service.dto.PaymentResponse;
 import com.paystream.payment_service.entity.Payment;
 import com.paystream.payment_service.exception.PaymentNotFoundException;
+import com.paystream.payment_service.mapper.PaymentMapper;
 import com.paystream.payment_service.repository.PaymentRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,37 +32,18 @@ public class CreatePaymentServiceImpl implements CreatePaymentService{
 
         Payment savedPayment = paymentRepository.save(payment);
 
-        return PaymentResponse.builder()
-                .id(savedPayment.getId())
-                .sender(savedPayment.getSender())
-                .receiver(savedPayment.getReceiver())
-                .amount(savedPayment.getAmount())
-                .status(savedPayment.getStatus())
-                .build();
+        return PaymentMapper.paymentResponse(savedPayment);
     }
 
     @Override
     public PaymentResponse getPayment(Long paymentId) {
         Payment payment = paymentRepository.findById(paymentId).orElseThrow(() -> new PaymentNotFoundException(paymentId));
-        return PaymentResponse.builder()
-                .id(payment.getId())
-                .sender(payment.getSender())
-                .receiver(payment.getReceiver())
-                .amount(payment.getAmount())
-                .status(payment.getStatus())
-                .build();
+        return PaymentMapper.paymentResponse(payment);
     }
 
     @Override
     public Page<PaymentResponse> getAllPayments(Pageable pageable) {
         return paymentRepository.findAll(pageable)
-                .map(payment -> PaymentResponse.builder()
-                        .id(payment.getId())
-                        .sender(payment.getSender())
-                        .receiver(payment.getReceiver())
-                        .amount(payment.getAmount())
-                        .status(payment.getStatus())
-                        .build()
-                );
+                .map(payment -> PaymentMapper.paymentResponse(payment));
     }
 }
