@@ -5,7 +5,11 @@ import com.paystream.payment_service.dto.PaymentResponse;
 import com.paystream.payment_service.service.CreatePaymentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/payments")
@@ -22,5 +26,10 @@ public class PaymentController {
     @GetMapping("/{paymentId}")
     public PaymentResponse getPayment(@PathVariable Long paymentId) {
         return createPaymentService.getPayment(paymentId);
+    }
+
+    @GetMapping("/allPayments")
+    public Page<PaymentResponse> getAllPayments(Pageable pageable) {
+        return createPaymentService.getAllPayments(pageable);
     }
 }

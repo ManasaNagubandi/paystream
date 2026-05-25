@@ -5,6 +5,8 @@ import com.paystream.payment_service.dto.PaymentResponse;
 import com.paystream.payment_service.entity.Payment;
 import com.paystream.payment_service.exception.PaymentNotFoundException;
 import com.paystream.payment_service.repository.PaymentRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -48,5 +50,18 @@ public class CreatePaymentServiceImpl implements CreatePaymentService{
                 .amount(payment.getAmount())
                 .status(payment.getStatus())
                 .build();
+    }
+
+    @Override
+    public Page<PaymentResponse> getAllPayments(Pageable pageable) {
+        return paymentRepository.findAll(pageable)
+                .map(payment -> PaymentResponse.builder()
+                        .id(payment.getId())
+                        .sender(payment.getSender())
+                        .receiver(payment.getReceiver())
+                        .amount(payment.getAmount())
+                        .status(payment.getStatus())
+                        .build()
+                );
     }
 }
