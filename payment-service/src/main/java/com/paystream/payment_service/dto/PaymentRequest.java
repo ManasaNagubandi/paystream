@@ -1,16 +1,16 @@
 package com.paystream.payment_service.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
-import lombok.NonNull;
 
 @Data
 public class PaymentRequest {
 
-    @NonNull
+    @NotBlank
     private String sender;
 
-    @NonNull
+    @NotBlank
     private String receiver;
 
     @Positive

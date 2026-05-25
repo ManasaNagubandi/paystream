@@ -3,6 +3,7 @@ package com.paystream.payment_service.service;
 import com.paystream.payment_service.dto.PaymentRequest;
 import com.paystream.payment_service.dto.PaymentResponse;
 import com.paystream.payment_service.entity.Payment;
+import com.paystream.payment_service.exception.PaymentNotFoundException;
 import com.paystream.payment_service.repository.PaymentRepository;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +35,18 @@ public class CreatePaymentServiceImpl implements CreatePaymentService{
                 .receiver(savedPayment.getReceiver())
                 .amount(savedPayment.getAmount())
                 .status(savedPayment.getStatus())
+                .build();
+    }
+
+    @Override
+    public PaymentResponse getPayment(Long paymentId) {
+        Payment payment = paymentRepository.findById(paymentId).orElseThrow(() -> new PaymentNotFoundException(paymentId));
+        return PaymentResponse.builder()
+                .id(payment.getId())
+                .sender(payment.getSender())
+                .receiver(payment.getReceiver())
+                .amount(payment.getAmount())
+                .status(payment.getStatus())
                 .build();
     }
 }

@@ -5,10 +5,7 @@ import com.paystream.payment_service.dto.PaymentResponse;
 import com.paystream.payment_service.service.CreatePaymentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/payments")
@@ -20,5 +17,10 @@ public class PaymentController {
     @PostMapping("/create")
     public PaymentResponse createPayment(@Valid @RequestBody PaymentRequest paymentRequest) {
         return createPaymentService.createPayment(paymentRequest);
+    }
+
+    @GetMapping("/{paymentId}")
+    public PaymentResponse getPayment(@PathVariable Long paymentId) {
+        return createPaymentService.getPayment(paymentId);
     }
 }
